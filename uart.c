@@ -132,11 +132,19 @@ uint8_t Uart_Disable(void)
 
 char get_RecvBuffer_data(void)
 {
+	/*Note we disable interrupts and re-enable it again to save shared data to not to be interrupted during operation on it at task */ 
 	QueueEntry data ;
+
+	//disable_interrupt
+	uint_8 sreg = SREG ;
+	cli() ;
 	
 	if( !QueueEmpty(&recv_buffer) )
 	{
 		Serve(&data , &recv_buffer);
+		//Re-enable_interrupt (if it was enabled at very first) ;
+		SREG = sreg ;
+
 		return ((uint8_t)data) ;
 	}
 
