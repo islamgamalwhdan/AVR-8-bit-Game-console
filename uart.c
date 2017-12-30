@@ -8,22 +8,18 @@
 // Uart interrupt driven driver for ATmega32 .
 // also there is non-interrupt function to receive and transmit data .
 
-//Last modified : 5/5/2017 .
+//Last modified : 30/12/2017 .
 
 /* =================== Includes ================================ */
 #ifndef F_CPU
        #define F_CPU 8000000UL
 #endif
 
-#ifndef SREG
-      #define SREG (*((volatile uint8_t *)0x3F))
-#endif
-
-
-#include <string.h>  // sprintf usage .
+#include <stdio.h>  // sprintf usage .
  
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include <util/atomic.h>
 
 #include "uart.h"
 
@@ -120,7 +116,7 @@ uint8_t Uart_init(uint16_t b_rate)
 	 
 	// Step 5 : Enable Global interrupt
 	
-	sei() ;
+	sei() ;  // VERY IMPORTANT BUG here Uart_receve_chr function bug you should disable it to work .
 	 
 	return 1 ;
 }
@@ -136,21 +132,18 @@ uint8_t Uart_Disable(void)
 
 char get_RecvBuffer_data(void)
 {
-	/*Note we disable interrupts and re-enable it again to save shared data to not to be interrupted during operation on it at task */ 
+	/*Note we disable interrupts and re-enable it again to save shared data to not to be interrupted during operation on it at task  (atomic block) */ 
 	QueueEntry data ;
 
-	//disable_interrupt
-	uint8_t sreg = SREG ;
-	cli() ;
-	
-	if( !QueueEmpty(&recv_buffer) )
+	ATOMIC_BLOCK(ATOMIC_RESTORESTATE)
 	{
-		Serve(&data , &recv_buffer);
-		//Re-enable_interrupt (if it was enabled at very first) ;
-		SREG = sreg ;
-
+		
+	 if( !QueueEmpty(&recv_buffer) )
+	 {
+	    Serve(&data , &recv_buffer);
+	}	 	
 		return ((uint8_t)data) ;
-	}
+	  }
 
 	  return 0 ;
 }
@@ -364,4 +357,3 @@ static inline uint8_t ClearQueue(volatile Queue_t *pq)
 	
 	return 1 ;
 } 
-
