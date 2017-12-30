@@ -15,6 +15,10 @@
        #define F_CPU 8000000UL
 #endif
 
+#ifndef SREG
+      #define SREG (*((volatile uint8_t *)0x3F))
+#endif
+
 
 #include <string.h>  // sprintf usage .
  
@@ -136,7 +140,7 @@ char get_RecvBuffer_data(void)
 	QueueEntry data ;
 
 	//disable_interrupt
-	uint_8 sreg = SREG ;
+	uint8_t sreg = SREG ;
 	cli() ;
 	
 	if( !QueueEmpty(&recv_buffer) )
