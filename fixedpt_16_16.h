@@ -15,7 +15,7 @@ typedef  int FIXPONT ;
 
 /*Macros*/
 
- #define INT_TO_FXPONT(n)    ((FIXPONT)(n<<FP_SHIFT>
+ #define INT_TO_FXPONT(n)    ((FIXPONT)(n<<FP_SHIFT))
  #define FLT_TO_FIXPONT(n)   ((FIXPONT) ((float)n*FP_SCALE))
  #define INTEGRL_FX_PART(f)  (f>>FP_SHIFT)
  #define FRACTION_FX_PART(f) (f&0x0000FFFF)
