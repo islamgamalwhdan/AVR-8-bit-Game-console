@@ -67,8 +67,6 @@ int main(void)
 	_delay_ms(100) ;
 	Uart_Transimit_String("\nLoading SD Card ...") ;
 	#endif
-	
-	int *ptr = malloc(sizeof(int)) ;
 	// 1 - Wait while for mounting SD card 
     while( ((mount_status = SD_mount()) == 0xFF) && (iterations++ < MOUNT_ITERATION_MAX) ) ;
 	
