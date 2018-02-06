@@ -1,8 +1,22 @@
 /*
- * bootloader_fa16.c
+ * main.c
  *
  * Created: 2/6/2018 5:43:16 AM
- *  Author: Islam
+ *  Author: Islam Gamal
+ *  Target : AVR 8-bit - ATmega644P
+ 
+ VERY IMPORTANT NOTES
+ 
+ NOTE 1:
+   to extract bin file from AVR studio(5) project from it's hex file you should do that :
+ 1- open project -> properties -> Build events 
+ 2- In pre-build event command line paste this line  : "C:\Program Files (x86)\Atmel\AVR Studio 5.0\AVR Toolchain\bin\avr-objcopy.exe" -I ihex  target.hex -O binary target.bin
+ 
+ NOTE 2:
+   to start burn boot loader hex file in boot section in flash memory you should do that :
+   1- open project -> properties ->Toolchain->AVR/GNU c linker -> miscellaneous 
+   2- In other linker flags paste this line: "-Wl,--section-start=.text=0xE000" without quotes "" .
+   
  */ 
 
 #define F_CPU 8000000UL
