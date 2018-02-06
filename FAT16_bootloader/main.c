@@ -127,7 +127,10 @@ if(pf_open(file_path) == FR_OK)
   } // while
   
  }//if  
- 
+	
+   ( (void (*)(void)) APPLICATION_FLASH_ADD)() ;
+	
+	
  	
 }
 
