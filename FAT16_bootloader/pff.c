@@ -456,14 +456,19 @@ FRESULT pf_mount (
 	FATFS *fs		/* Pointer to new file system object (NULL: Unmount) */
 )
 {
-	BYTE fmt, buf[36];
+	BYTE fmt, buf[36] ,i= 0 ;
 	DWORD bsect, fsize, tsect, mclst;
 
 	FatFs = 0;
 	if (!fs) return FR_OK;				/* Unregister fs object */
 
-	if (disk_initialize() & STA_NOINIT)	/* Check if the drive is ready or not */
-		return FR_NOT_READY;
+	DSTATUS mount_status ;
+	FatFs = 0;
+    while( (mount_status = disk_initialize()) == STA_NOINIT && (i++ < 20)) ;
+	//if (disk_initialize() & STA_NOINIT)	/* Check if the drive is ready or not */
+		//return FR_NOT_READY;
+	if(mount_status  == STA_NOINIT)
+	  return FR_NOT_READY;
 
 	/* Search FAT partition on the drive */
 	bsect = 0;
@@ -627,7 +632,7 @@ fr_abort:
 /*-----------------------------------------------------------------------*/
 /* Write File                                                            */
 /*-----------------------------------------------------------------------*/
-#if 0
+#if _USE_WRITE
 
 FRESULT pf_write (
 	const void* buff,	/* Pointer to the data to be written */
@@ -838,4 +843,3 @@ FRESULT pf_readdir (
 }
 
 #endif /* _USE_DIR */
-
