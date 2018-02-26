@@ -44,7 +44,7 @@
 #define  DIR_NAME "files"
 #define  DIR_PATH "files/"
 
-char buffer_out[200] ;
+char buffer_out[101]={} ;
 
 typedef struct
 {
@@ -74,6 +74,7 @@ int main(void)
 	FILINFO fno;
 	
     FILES_INFO content ;
+    memset(&content , 0 , sizeof(content)) ; // clear that struct .
 	int i = 0 ;	
 	Uart_init(9600,0) ;  // for debug .
 	// mount sd card .
